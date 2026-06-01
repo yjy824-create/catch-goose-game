@@ -1,3 +1,4 @@
+import CoverPanel from './components/CoverPanel';
 import GameBoard from './components/GameBoard';
 import Header from './components/Header';
 import ResultModal from './components/ResultModal';
@@ -11,6 +12,7 @@ function App() {
   return (
     <main className="app-shell">
       <Header timeLeft={game.timeLeft} totalScore={game.totalScore} highScore={game.highScore} />
+      {game.status === 'ready' && <CoverPanel highScore={game.highScore} />}
       <div className="level-pill">
         {game.currentLevel.shortTitle} · {game.currentLevel.title} · {game.currentLevel.difficulty}
       </div>
@@ -24,6 +26,7 @@ function App() {
       <div className="message-bar">{game.message}</div>
       <GameBoard
         board={game.board}
+        levelId={game.currentLevel.id}
         availableIds={game.availableIds}
         pickedItemId={game.pickedItemId}
         onPick={game.pickItem}

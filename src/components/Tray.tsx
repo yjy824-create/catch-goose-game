@@ -1,3 +1,5 @@
+import AssetImage from './AssetImage';
+import { getItemImage } from '../data/assets';
 import { BoardItem, ItemTypeId, TRAY_LIMIT } from '../data/gameConfig';
 
 type TrayProps = {
@@ -17,7 +19,11 @@ const Tray = ({ tray, clearingType }: TrayProps) => {
             key={item?.id ?? `slot-${index}`}
             className={`tray-slot ${item?.type === clearingType ? 'clearing' : ''}`}
           >
-            {item ? <span title={item.label}>{item.emoji}</span> : <small>{index + 1}</small>}
+            {item ? (
+              <AssetImage src={getItemImage(item.type)} alt={item.label} fallback={item.emoji} />
+            ) : (
+              <small>{index + 1}</small>
+            )}
           </div>
         ))}
       </div>

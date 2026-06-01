@@ -105,3 +105,45 @@ Create original mobile game UI button assets, chunky rounded buttons in goose ye
 ```text
 Create an original mobile game cover illustration for Catch Goose style casual puzzle game, cute white goose in a sunny farm courtyard, stacked farm item stickers, wicker basket tray, playful and shareable, vertical 9:16 composition, bold empty space for title overlay, goose yellow, cream, light orange, grass green, rounded flat cartoon style, no text, no logo, PNG cover art.
 ```
+
+---
+
+# 第四阶段正式素材生产清单
+
+把生成好的文件放进 `public/assets` 对应目录即可。代码中的路径统一由 `src/data/assets.ts` 管理，图片不存在或加载失败时会自动 fallback 到 emoji / CSS。
+
+| 文件名 | 建议尺寸 | 透明背景 | 目录 | 用途 |
+|---|---:|---|---|---|
+| `goose-main.png` | 1024x1024 | 是 | `public/assets/goose/` | 首页封面与开始弹窗主视觉 |
+| `goose-win.png` | 1024x1024 | 是 | `public/assets/goose/` | 胜利 / 最终通关弹窗 |
+| `goose-fail.png` | 1024x1024 | 是 | `public/assets/goose/` | 失败弹窗 |
+| `bg-level-1.png` | 1080x1920 | 否 | `public/assets/background/` | 第 1 关清晨农场小院背景 |
+| `bg-level-2.png` | 1080x1920 | 否 | `public/assets/background/` | 第 2 关午后农场桌面背景 |
+| `bg-level-3.png` | 1080x1920 | 否 | `public/assets/background/` | 第 3 关傍晚终极挑战背景 |
+| `cover.png` | 1080x1920 | 否 | `public/assets/background/` | 游戏封面背景 |
+| `item-goose.png` | 512x512 | 是 | `public/assets/items/` | 大鹅小物图标 |
+| `item-corn.png` | 512x512 | 是 | `public/assets/items/` | 玉米图标 |
+| `item-carrot.png` | 512x512 | 是 | `public/assets/items/` | 胡萝卜图标 |
+| `item-fish.png` | 512x512 | 是 | `public/assets/items/` | 小鱼图标 |
+| `item-apple.png` | 512x512 | 是 | `public/assets/items/` | 苹果图标 |
+| `item-bread.png` | 512x512 | 是 | `public/assets/items/` | 面包图标 |
+| `item-leaf.png` | 512x512 | 是 | `public/assets/items/` | 叶子图标 |
+| `item-bucket.png` | 512x512 | 是 | `public/assets/items/` | 水桶图标 |
+| `tray-basket.png` | 1600x360 | 是 | `public/assets/ui/` | 下方 7 格收纳篮 |
+| `button-start.png` | 800x240 | 是 | `public/assets/ui/` | 开始按钮材质 |
+| `tap.mp3` | 0.1-0.3 秒 | 不适用 | `public/assets/sfx/` | 点击物品音效 |
+| `match.mp3` | 0.3-0.6 秒 | 不适用 | `public/assets/sfx/` | 三消音效 |
+| `win.mp3` | 0.8-1.5 秒 | 不适用 | `public/assets/sfx/` | 胜利音效 |
+| `lose.mp3` | 0.5-1.0 秒 | 不适用 | `public/assets/sfx/` | 失败音效 |
+
+## 单张物品图标提示词模板
+
+```text
+Create one original square PNG icon for a cute mobile match-3 farm collection game: [ITEM NAME], centered on transparent background, rounded sticker style, cream outline, soft drop shadow, goose yellow and grass green friendly palette, consistent lighting, no text, no logo, suitable for public/assets/items/[FILE NAME].
+```
+
+## 每关背景差异提示
+
+- 第 1 关：清晨、草地、明亮、留白多，适合新手。
+- 第 2 关：午后、小院、桌面杂物边缘更多，但中心仍然清楚。
+- 第 3 关：傍晚、橙色光、更热闹更紧张，但保持可爱和可读性。

@@ -1,4 +1,6 @@
 import { Home, Play, RotateCcw, StepForward } from 'lucide-react';
+import AssetImage from './AssetImage';
+import { imageAssets } from '../data/assets';
 import { GameStatus, LevelConfig } from '../data/gameConfig';
 import { ResultSummary } from '../hooks/useGameLogic';
 
@@ -34,7 +36,13 @@ const ResultModal = ({
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="result-title">
       <div className="modal-card" data-state={state}>
         {(isLevelWon || isGameWon) && <div className="confetti" aria-hidden="true">✦ ✿ ✦</div>}
-        <div className="goose-badge">🪿</div>
+        <div className="goose-badge">
+          <AssetImage
+            src={isReady ? imageAssets.goose.main : isLost ? imageAssets.goose.fail : imageAssets.goose.win}
+            alt={isReady ? '大鵝主視覺' : isLost ? '失敗大鵝' : '勝利大鵝'}
+            fallback="🪿"
+          />
+        </div>
         <h2 id="result-title">{title}</h2>
         <p>
           {isReady
@@ -98,4 +106,3 @@ const ResultModal = ({
 };
 
 export default ResultModal;
-

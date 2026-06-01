@@ -1,15 +1,24 @@
+import AssetImage from './AssetImage';
+import type { CSSProperties } from 'react';
+import { getItemImage, getLevelBackground } from '../data/assets';
 import { BoardItem } from '../data/gameConfig';
 
 type GameBoardProps = {
   board: BoardItem[];
+  levelId: number;
   availableIds: Set<string>;
   pickedItemId: string | null;
   onPick: (item: BoardItem) => void;
 };
 
-const GameBoard = ({ board, availableIds, pickedItemId, onPick }: GameBoardProps) => {
+const GameBoard = ({ board, levelId, availableIds, pickedItemId, onPick }: GameBoardProps) => {
   return (
-    <section className="board" aria-label="抓大鵝遊戲區">
+    <section
+      className="board"
+      data-level={levelId}
+      style={{ '--level-bg': `url("${getLevelBackground(levelId)}")` } as CSSProperties}
+      aria-label="抓大鵝遊戲區"
+    >
       <div className="farm-sun" />
       <div className="board-label">農場桌面</div>
       <div className="pond-glow" />
@@ -35,7 +44,7 @@ const GameBoard = ({ board, availableIds, pickedItemId, onPick }: GameBoardProps
               onClick={() => onPick(item)}
               aria-label={`${available ? '可選取' : '被遮擋'}：${item.label}`}
             >
-              <span>{item.emoji}</span>
+              <AssetImage src={getItemImage(item.type)} alt={item.label} fallback={item.emoji} />
             </button>
           );
         })}
