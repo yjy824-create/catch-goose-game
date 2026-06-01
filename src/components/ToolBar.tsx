@@ -14,11 +14,11 @@ const ToolBar = ({ disabled, onHint, onShuffle, onRemove }: ToolBarProps) => {
         <Lightbulb size={19} strokeWidth={2.6} />
         <span>提示</span>
       </button>
-      <button onClick={onShuffle} disabled={disabled} title="重新排列桌面物品，扣 30 分">
+      <button onClick={onShuffle} disabled={disabled} title="重新排列桌面物品，combo 重新計算">
         <Shuffle size={19} strokeWidth={2.6} />
         <span>打亂</span>
       </button>
-      <button onClick={onRemove} disabled={disabled} title="移除一個可點選物品，扣 50 分">
+      <button onClick={onRemove} disabled={disabled} title="移除一個可點選物品，扣 5 分">
         <Wand2 size={19} strokeWidth={2.6} />
         <span>移除</span>
       </button>

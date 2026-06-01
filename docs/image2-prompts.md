@@ -52,3 +52,56 @@ Create an original cute start popup illustration: a white goose peeking from tal
 Design an original vertical mobile casual match-3 collection game UI, cute farm courtyard and pond theme, bold title area, top timer and score cards, center layered pile of rounded item stickers, bottom seven-slot basket tray, three chunky tool buttons, goose yellow, cream, light orange, grass green, soft shadows, no text, no logo, no copied game interface.
 ```
 
+---
+
+# 第三阶段正式素材提示词
+
+以下提示词用于正式替换 `public/assets` 目录中的素材。所有素材都必须原创，风格统一，适合手机小游戏。
+
+## 9. 第 1 关背景图：农场初级挑战
+
+```text
+Create an original 9:16 vertical mobile game background for level 1, beginner farm challenge, sunny farm tabletop beside a small pond, soft grass, cream yellow sunlight, simple wooden fence, clean open center for puzzle items, cute quirky farmyard feeling, rounded flat cartoon style, pastel goose yellow, cream, light orange, grass green, no text, no logo, PNG game background.
+```
+
+## 10. 第 2 关背景图：小院进阶挑战
+
+```text
+Create an original 9:16 vertical mobile game background for level 2, cozy farm courtyard advanced challenge, more garden props around the edges, stone path, low fence, pond corner, soft afternoon light, center area clear for stacked item stickers, cute mischievous casual game mood, rounded flat cartoon style, unified pastel colors, no text, no logo, PNG game background.
+```
+
+## 11. 第 3 关背景图：大鹅终极挑战
+
+```text
+Create an original 9:16 vertical mobile game background for level 3, final goose challenge, lively farm courtyard with dramatic warm sunlight, pond sparkle, scattered hay and small wooden crates around edges, clear center for dense puzzle items, cute chaotic but readable mobile game background, goose yellow, cream, orange, grass green, rounded cartoon style, no text, no logo, PNG background.
+```
+
+## 12. 大鹅胜利插图
+
+```text
+Create an original victory illustration asset for a mobile casual puzzle game, cute white goose proudly sitting in a wicker basket, stars and confetti, playful triumphant expression, orange beak and feet, rounded flat cartoon sticker style, transparent background, soft shadow, no text, no logo, PNG popup illustration.
+```
+
+## 13. 大鹅失败插图
+
+```text
+Create an original funny failure illustration asset for a mobile casual puzzle game, cute white goose confused but cheerful, peeking over an overflowing basket of farm items, lighthearted expression, no sadness, rounded flat cartoon sticker style, transparent background, soft shadow, no text, no logo, PNG popup illustration.
+```
+
+## 14. 三消物品图标
+
+```text
+Create a unified set of square PNG item icons for a mobile match-3 collection game: corn, carrot, small fish, red apple, bread cube, green leaf, blue bucket, and tiny goose token, centered on transparent background, rounded sticker style, cream outline, soft drop shadow, consistent light source, cute farmyard feeling, no text, no logo.
+```
+
+## 15. UI 按钮素材
+
+```text
+Create original mobile game UI button assets, chunky rounded buttons in goose yellow, grass green, and warm coral orange, subtle 3D bottom shadow, cream highlight, designed for hint, shuffle, remove, next level, retry, and home actions, transparent background, no text, no icons, no logo, PNG UI kit.
+```
+
+## 16. 游戏封面图
+
+```text
+Create an original mobile game cover illustration for Catch Goose style casual puzzle game, cute white goose in a sunny farm courtyard, stacked farm item stickers, wicker basket tray, playful and shareable, vertical 9:16 composition, bold empty space for title overlay, goose yellow, cream, light orange, grass green, rounded flat cartoon style, no text, no logo, PNG cover art.
+```

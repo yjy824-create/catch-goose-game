@@ -10,8 +10,17 @@ function App() {
 
   return (
     <main className="app-shell">
-      <Header timeLeft={game.timeLeft} score={game.score} />
-      <div className="level-pill">第 1 關 · 初級挑戰</div>
+      <Header timeLeft={game.timeLeft} totalScore={game.totalScore} highScore={game.highScore} />
+      <div className="level-pill">
+        {game.currentLevel.shortTitle} · {game.currentLevel.title} · {game.currentLevel.difficulty}
+      </div>
+      <div className="run-strip" aria-label="遊戲進度">
+        <span>本關 {game.levelScore}</span>
+        <span>Combo {game.combo}</span>
+        <span>
+          {game.currentLevelIndex + 1}/{game.levels.length}
+        </span>
+      </div>
       <div className="message-bar">{game.message}</div>
       <GameBoard
         board={game.board}
@@ -26,7 +35,15 @@ function App() {
         onShuffle={game.useShuffle}
         onRemove={game.useRemove}
       />
-      <ResultModal status={game.status} message={game.resultMessage} onStart={game.startGame} />
+      <ResultModal
+        status={game.status}
+        currentLevel={game.currentLevel}
+        resultSummary={game.resultSummary}
+        onStart={game.startGame}
+        onRetry={game.retryLevel}
+        onNextLevel={game.nextLevel}
+        onHome={game.goHome}
+      />
     </main>
   );
 }

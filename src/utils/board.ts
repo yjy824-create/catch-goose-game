@@ -1,4 +1,4 @@
-import { BoardItem, ITEM_TYPES } from '../data/gameConfig';
+import { BoardItem, ITEM_TYPES, LevelConfig } from '../data/gameConfig';
 
 const shuffle = <T,>(items: T[]): T[] => {
   const copy = [...items];
@@ -9,17 +9,17 @@ const shuffle = <T,>(items: T[]): T[] => {
   return copy;
 };
 
-export const createBoard = (): BoardItem[] => {
+export const createBoard = (level: LevelConfig): BoardItem[] => {
   const selected = ITEM_TYPES.slice(0, 8);
   const pool = selected.flatMap((item) =>
-    Array.from({ length: item.id === 'goose' ? 3 : 6 }, () => item)
+    Array.from({ length: item.id === 'goose' ? level.gooseRepeats : level.itemRepeats }, () => item)
   );
 
   return shuffle(pool).map((item, index) => {
-    const layer = Math.floor(index / 15);
-    const slot = index % 15;
-    const column = slot % 5;
-    const row = Math.floor(slot / 5);
+    const layer = Math.floor(index / level.slotsPerLayer);
+    const slot = index % level.slotsPerLayer;
+    const column = slot % level.columns;
+    const row = Math.floor(slot / level.columns);
     const jitterX = Math.random() * 4 - 2;
     const jitterY = Math.random() * 4 - 2;
 
@@ -28,21 +28,21 @@ export const createBoard = (): BoardItem[] => {
       type: item.id,
       label: item.label,
       emoji: item.emoji,
-      x: 12 + column * 16 + jitterX + (layer % 2) * 5,
-      y: 18 + row * 18 + layer * 7 + jitterY,
+      x: 12 + column * level.xGap + jitterX + (layer % 2) * level.layerOffsetX,
+      y: 18 + row * level.yGap + layer * level.layerOffsetY + jitterY,
       layer,
       rotation: Math.random() * 32 - 16,
-      size: 48 + Math.random() * 6
+      size: level.itemSize + Math.random() * 5
     };
   });
 };
 
-export const isCovered = (item: BoardItem, board: BoardItem[]): boolean => {
+export const isCovered = (item: BoardItem, board: BoardItem[], level: LevelConfig): boolean => {
   return board.some((other) => {
     if (other.id === item.id || other.layer <= item.layer) return false;
     const dx = Math.abs(other.x - item.x);
     const dy = Math.abs(other.y - item.y);
-    return dx < 13 && dy < 15;
+    return dx < level.coverDx && dy < level.coverDy;
   });
 };
 

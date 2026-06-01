@@ -1,11 +1,12 @@
-import { Clock3, Sparkles } from 'lucide-react';
+import { Clock3, Sparkles, Trophy } from 'lucide-react';
 
 type HeaderProps = {
   timeLeft: number;
-  score: number;
+  totalScore: number;
+  highScore: number;
 };
 
-const Header = ({ timeLeft, score }: HeaderProps) => {
+const Header = ({ timeLeft, totalScore, highScore }: HeaderProps) => {
   return (
     <header className="game-header">
       <div>
@@ -20,8 +21,13 @@ const Header = ({ timeLeft, score }: HeaderProps) => {
         </div>
         <div className="stat-card">
           <Sparkles size={16} strokeWidth={2.6} />
-          <span>分數</span>
-          <strong>{score}</strong>
+          <span>總分</span>
+          <strong>{totalScore}</strong>
+        </div>
+        <div className="stat-card">
+          <Trophy size={16} strokeWidth={2.6} />
+          <span>最高</span>
+          <strong>{highScore}</strong>
         </div>
       </div>
     </header>

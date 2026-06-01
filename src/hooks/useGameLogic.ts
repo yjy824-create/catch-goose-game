@@ -1,9 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BoardItem, INITIAL_TIME, ItemTypeId, TRAY_LIMIT } from '../data/gameConfig';
+import { BoardItem, GameStatus, HIGH_SCORE_KEY, ItemTypeId, LEVELS, TRAY_LIMIT } from '../data/gameConfig';
 import { createBoard, isCovered, shuffleBoardPositions } from '../utils/board';
 import { useSoundEffects } from './useSoundEffects';
 
-export type GameStatus = 'ready' | 'playing' | 'won' | 'lost';
+export type ResultSummary = {
+  status: Exclude<GameStatus, 'ready' | 'playing'>;
+  levelTitle: string;
+  levelNumber: number;
+  levelScore: number;
+  totalScore: number;
+  highScore: number;
+  isNewRecord: boolean;
+  timeBonus: number;
+  message: string;
+};
+
+const readHighScore = () => {
+  if (typeof window === 'undefined') return 0;
+  const value = window.localStorage.getItem(HIGH_SCORE_KEY);
+  return value ? Number.parseInt(value, 10) || 0 : 0;
+};
 
 const findTripleType = (tray: BoardItem[]): ItemTypeId | null => {
   const counts = tray.reduce<Partial<Record<ItemTypeId, number>>>((acc, item) => {
@@ -38,71 +54,146 @@ const chooseHint = (available: BoardItem[], tray: BoardItem[]) => {
   );
 };
 
-const getResultMessage = (status: GameStatus, score: number) => {
-  if (status === 'ready') {
-    return '點選上層物品，湊滿三個相同物品即可消除，清空桌面就能抓到大鵝。';
-  }
-  if (status === 'won') {
-    return `成功抓到大鵝！本局分數 ${score}。`;
-  }
-  return `挑戰失敗，本局分數 ${score}。整理下方欄位的節奏會更關鍵。`;
-};
-
 const clampScore = (value: number) => Math.max(0, value);
+const comboScore = (combo: number) => 10 + Math.max(0, combo - 1) * 5;
 
 export const useGameLogic = () => {
   const { play } = useSoundEffects();
-  const [board, setBoard] = useState<BoardItem[]>(() => createBoard());
+  const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
+  const currentLevel = LEVELS[currentLevelIndex];
+  const [board, setBoard] = useState<BoardItem[]>(() => createBoard(LEVELS[0]));
   const [tray, setTray] = useState<BoardItem[]>([]);
   const [status, setStatus] = useState<GameStatus>('ready');
-  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
-  const [score, setScore] = useState(0);
-  const [message, setMessage] = useState(getResultMessage('ready', 0));
+  const [timeLeft, setTimeLeft] = useState(LEVELS[0].timeLimit);
+  const [totalScore, setTotalScore] = useState(0);
+  const [levelScore, setLevelScore] = useState(0);
+  const [levelStartScore, setLevelStartScore] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [highScore, setHighScore] = useState(readHighScore);
+  const [message, setMessage] = useState('準備好就開始第 1 關，連續三消可以累積 combo。');
   const [clearingType, setClearingType] = useState<ItemTypeId | null>(null);
   const [pickedItemId, setPickedItemId] = useState<string | null>(null);
+  const [resultSummary, setResultSummary] = useState<ResultSummary | null>(null);
   const clearTimerRef = useRef<number | null>(null);
 
   const availableIds = useMemo(
-    () => new Set(board.filter((item) => !isCovered(item, board)).map((item) => item.id)),
-    [board]
+    () => new Set(board.filter((item) => !isCovered(item, board, currentLevel)).map((item) => item.id)),
+    [board, currentLevel]
   );
 
   const isPlaying = status === 'playing';
+  const isFinalLevel = currentLevelIndex === LEVELS.length - 1;
+
+  const clearPendingTimer = () => {
+    if (clearTimerRef.current) {
+      window.clearTimeout(clearTimerRef.current);
+      clearTimerRef.current = null;
+    }
+  };
+
+  const updateHighScore = (score: number) => {
+    const nextHighScore = Math.max(highScore, score);
+    const isNewRecord = score > highScore;
+    if (isNewRecord && typeof window !== 'undefined') {
+      window.localStorage.setItem(HIGH_SCORE_KEY, String(score));
+    }
+    setHighScore(nextHighScore);
+    return { highScore: nextHighScore, isNewRecord };
+  };
+
+  const finishLevel = (finalStatus: ResultSummary['status'], nextLevelScore: number, nextTotalScore: number, timeBonus: number) => {
+    const isRunOver = finalStatus !== 'levelWon';
+    const record = isRunOver
+      ? updateHighScore(nextTotalScore)
+      : { highScore: Math.max(highScore, nextTotalScore), isNewRecord: false };
+
+    const message =
+      finalStatus === 'gameWon'
+        ? '三關全通！大鵝被你穩穩抓住了。'
+        : finalStatus === 'levelWon'
+          ? '本關通過！整理一下籃子，準備進下一關。'
+          : '挑戰失敗！保留節奏，重新挑戰本關就好。';
+
+    setResultSummary({
+      status: finalStatus,
+      levelTitle: currentLevel.title,
+      levelNumber: currentLevel.id,
+      levelScore: nextLevelScore,
+      totalScore: nextTotalScore,
+      highScore: record.highScore,
+      isNewRecord: record.isNewRecord,
+      timeBonus,
+      message
+    });
+    setStatus(finalStatus);
+    setMessage(message);
+  };
+
+  const setupLevel = (levelIndex: number, scoreAtStart: number, introPrefix = '') => {
+    const level = LEVELS[levelIndex];
+    clearPendingTimer();
+    setCurrentLevelIndex(levelIndex);
+    setBoard(createBoard(level));
+    setTray([]);
+    setTimeLeft(level.timeLimit);
+    setLevelStartScore(scoreAtStart);
+    setTotalScore(scoreAtStart);
+    setLevelScore(0);
+    setCombo(0);
+    setClearingType(null);
+    setPickedItemId(null);
+    setResultSummary(null);
+    setStatus('playing');
+    setMessage(`${introPrefix}${level.shortTitle}：${level.intro}`);
+    play('tool');
+  };
 
   useEffect(() => {
     if (!isPlaying) return;
     if (timeLeft <= 0) {
-      setStatus('lost');
-      setMessage('時間到！再試一次，先消明顯的物品。');
       play('lose');
+      setCombo(0);
+      finishLevel('lost', levelScore, totalScore, 0);
       return;
     }
 
     const timer = window.setTimeout(() => setTimeLeft((time) => time - 1), 1000);
     return () => window.clearTimeout(timer);
-  }, [isPlaying, play, timeLeft]);
+  }, [isPlaying, levelScore, play, timeLeft, totalScore]);
 
   useEffect(() => {
-    return () => {
-      if (clearTimerRef.current) {
-        window.clearTimeout(clearTimerRef.current);
-      }
-    };
+    return () => clearPendingTimer();
   }, []);
 
   const startGame = () => {
-    if (clearTimerRef.current) {
-      window.clearTimeout(clearTimerRef.current);
-    }
-    setBoard(createBoard());
+    setupLevel(0, 0);
+  };
+
+  const goHome = () => {
+    clearPendingTimer();
+    setCurrentLevelIndex(0);
+    setBoard(createBoard(LEVELS[0]));
     setTray([]);
-    setStatus('playing');
-    setTimeLeft(INITIAL_TIME);
-    setScore(0);
+    setStatus('ready');
+    setTimeLeft(LEVELS[0].timeLimit);
+    setTotalScore(0);
+    setLevelScore(0);
+    setLevelStartScore(0);
+    setCombo(0);
     setClearingType(null);
     setPickedItemId(null);
-    setMessage('第 1 關開始！凑齊 3 個相同物品就能消除。');
-    play('tool');
+    setResultSummary(null);
+    setMessage('準備好就開始第 1 關，連續三消可以累積 combo。');
+  };
+
+  const retryLevel = () => {
+    setupLevel(currentLevelIndex, levelStartScore, '重新挑戰！');
+  };
+
+  const nextLevel = () => {
+    if (!isFinalLevel) {
+      setupLevel(currentLevelIndex + 1, totalScore, '過關啦！');
+    }
   };
 
   const pickItem = (item: BoardItem) => {
@@ -122,50 +213,47 @@ export const useGameLogic = () => {
     if (!tripleType && nextTrayRaw.length === TRAY_LIMIT) {
       setBoard(nextBoard);
       setTray(nextTrayRaw);
-      setStatus('lost');
-      setMessage('小籃子塞滿了！下次先湊三個再裝。');
+      setCombo(0);
       play('lose');
+      finishLevel('lost', levelScore, totalScore, 0);
       return;
     }
 
     setBoard(nextBoard);
     setTray(nextTrayRaw);
-    setScore((value) => value + 10);
 
     if (tripleType) {
+      const nextCombo = combo + 1;
+      const matchScore = comboScore(nextCombo);
       setClearingType(tripleType);
-      setMessage(`三個「${item.label}」集合！小籃子正在清空。`);
+      setMessage(`Combo ${nextCombo}！三個「${item.label}」集合，+${matchScore} 分。`);
       play('match');
       clearTimerRef.current = window.setTimeout(() => {
         const resolvedTray = removeTriple(nextTrayRaw, tripleType);
-        const winBonus = nextBoard.length === 0 && resolvedTray.length === 0 ? 500 + timeLeft * 5 : 0;
+        const clearedBoard = nextBoard.length === 0 && resolvedTray.length === 0;
+        const timeBonus = clearedBoard ? timeLeft : 0;
+        const nextLevelScore = levelScore + matchScore + timeBonus;
+        const nextTotalScore = totalScore + matchScore + timeBonus;
 
         setTray(resolvedTray);
         setClearingType(null);
-        setScore((value) => value + 60 + winBonus);
+        setCombo(nextCombo);
+        setLevelScore(nextLevelScore);
+        setTotalScore(nextTotalScore);
 
-        if (winBonus) {
-          setStatus('won');
-          setMessage(`成功抓到大鵝！剩餘時間加成 +${winBonus}。`);
+        if (clearedBoard) {
           play('win');
+          finishLevel(isFinalLevel ? 'gameWon' : 'levelWon', nextLevelScore, nextTotalScore, timeBonus);
           return;
         }
 
-        setMessage('三消成功！繼續整理桌上的小物件。');
+        setMessage(`三消成功！目前 combo ${nextCombo}，下一次連消分數更高。`);
       }, 280);
       return;
     }
 
-    if (nextBoard.length === 0 && nextTrayRaw.length === 0) {
-      const winBonus = 500 + timeLeft * 5;
-      setStatus('won');
-      setScore((value) => value + winBonus);
-      setMessage(`成功抓到大鵝！剩餘時間加成 +${winBonus}。`);
-      play('win');
-      return;
-    }
-
-    setMessage(`「${item.label}」放進小籃子了，凑齊 3 個就會消除。`);
+    setCombo(0);
+    setMessage(`「${item.label}」放進小籃子了；這次沒有三消，combo 重新計算。`);
   };
 
   const useHint = () => {
@@ -179,8 +267,8 @@ export const useGameLogic = () => {
   const useShuffle = () => {
     if (!isPlaying || clearingType) return;
     setBoard((items) => shuffleBoardPositions(items));
-    setScore((value) => clampScore(value - 30));
-    setMessage('已打亂桌面，會扣 30 分。');
+    setCombo(0);
+    setMessage('已打亂桌面，combo 重新計算。');
     play('tool');
   };
 
@@ -192,19 +280,23 @@ export const useGameLogic = () => {
       return;
     }
     const nextBoard = board.filter((boardItem) => boardItem.id !== item.id);
-    const winBonus = nextBoard.length === 0 && tray.length === 0 ? 500 + timeLeft * 5 : 0;
+    const clearedBoard = nextBoard.length === 0 && tray.length === 0;
+    const timeBonus = clearedBoard ? timeLeft : 0;
+    const nextLevelScore = clampScore(levelScore - 5 + timeBonus);
+    const nextTotalScore = clampScore(totalScore - 5 + timeBonus);
 
     setBoard(nextBoard);
-    setScore((value) => clampScore(value - 50 + winBonus));
-    if (winBonus) {
-      setStatus('won');
-      setMessage(`成功抓到大鵝！剩餘時間加成 +${winBonus}。`);
-      play('win');
+    setLevelScore(nextLevelScore);
+    setTotalScore(nextTotalScore);
+    setCombo(0);
+    play(clearedBoard ? 'win' : 'tool');
+
+    if (clearedBoard) {
+      finishLevel(isFinalLevel ? 'gameWon' : 'levelWon', nextLevelScore, nextTotalScore, timeBonus);
       return;
     }
 
-    setMessage(`已移除一個「${item.label}」，會扣 50 分。`);
-    play('tool');
+    setMessage(`已移除一個「${item.label}」，扣 5 分並重置 combo。`);
   };
 
   return {
@@ -212,18 +304,30 @@ export const useGameLogic = () => {
     tray,
     status,
     timeLeft,
-    score,
+    totalScore,
+    levelScore,
+    levelStartScore,
+    combo,
+    highScore,
     message,
+    currentLevel,
+    currentLevelIndex,
+    levels: LEVELS,
+    isFinalLevel,
     isPlaying,
     clearingType,
     pickedItemId,
     isBusy: Boolean(clearingType),
-    resultMessage: getResultMessage(status, score),
+    resultSummary,
     availableIds,
     startGame,
+    retryLevel,
+    nextLevel,
+    goHome,
     pickItem,
     useHint,
     useShuffle,
     useRemove
   };
 };
+
