@@ -1,0 +1,351 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, 'Noto Sans TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  background: #f5efd9;
+  color: #342516;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(162, 215, 240, 0.45) 0%, rgba(245, 239, 217, 0.9) 42%, #dcefc6 100%);
+}
+
+button {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+  width: min(100vw, 460px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 16px 14px 22px;
+  position: relative;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eyebrow {
+  margin: 0 0 3px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #6f8a3b;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.stats {
+  display: flex;
+  gap: 8px;
+}
+
+.stat-card {
+  width: 74px;
+  padding: 8px 7px;
+  border-radius: 8px;
+  background: rgba(255, 253, 242, .88);
+  box-shadow: 0 8px 18px rgba(83, 55, 15, .12);
+  text-align: center;
+  border: 1px solid rgba(95, 69, 35, .1);
+}
+
+.stat-card svg {
+  color: #5e913f;
+}
+
+.stat-card span {
+  display: block;
+  margin-top: 1px;
+  font-size: 12px;
+  color: #7b633e;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 19px;
+  line-height: 1.18;
+}
+
+.message-bar {
+  margin: 13px 0;
+  padding: 11px 12px;
+  border-radius: 8px;
+  background: #fffdf4;
+  box-shadow: inset 0 0 0 1px rgba(90, 60, 24, .1);
+  font-size: 14px;
+  line-height: 1.45;
+  min-height: 44px;
+}
+
+.board {
+  height: 462px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #aee2f0 0%, #d3edbc 52%, #f1c56e 100%);
+  box-shadow:
+    inset 0 -18px 34px rgba(79, 108, 61, .22),
+    0 18px 34px rgba(80, 58, 28, .16);
+  border: 1px solid rgba(83, 112, 58, .18);
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  right: 18px;
+  top: 34px;
+  height: 190px;
+  border-radius: 48% 52% 45% 55%;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, 0) 44%),
+    #78cce1;
+  border: 4px solid rgba(255, 253, 239, .65);
+  box-shadow: inset 0 -16px 28px rgba(43, 128, 146, .22);
+}
+
+.board::after {
+  content: '';
+  position: absolute;
+  left: -18px;
+  right: -18px;
+  bottom: 56px;
+  height: 72px;
+  background:
+    repeating-linear-gradient(90deg, rgba(119, 84, 36, .12) 0 18px, rgba(255, 255, 255, 0) 18px 36px),
+    #dfaa5c;
+  transform: rotate(-4deg);
+  border-top: 4px solid rgba(255, 239, 197, .6);
+  border-bottom: 4px solid rgba(122, 82, 36, .16);
+}
+
+.game-item {
+  position: absolute;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #fffdf2, #ffe1a3);
+  box-shadow: 0 9px 15px rgba(50, 35, 10, .2);
+  display: grid;
+  place-items: center;
+  transition: transform .16s ease, filter .16s ease, opacity .16s ease, box-shadow .16s ease;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-item::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, .7);
+  pointer-events: none;
+}
+
+.game-item span {
+  font-size: 30px;
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, .08));
+}
+
+.game-item.available:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  box-shadow: 0 12px 20px rgba(50, 35, 10, .25);
+}
+
+.game-item.available:active {
+  transform: scale(.96) rotate(0deg) !important;
+}
+
+.game-item.locked {
+  filter: grayscale(.3) brightness(.78);
+  opacity: .72;
+}
+
+.tray {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 7px;
+  margin-top: 13px;
+  padding: 9px;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(0, 0, 0, 0)),
+    #5b3c21;
+  box-shadow: 0 10px 22px rgba(63, 40, 18, .22);
+}
+
+.tray-slot {
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 8px;
+  background: #fff4d6;
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 2px rgba(81, 50, 22, .14);
+}
+
+.tray-slot span {
+  font-size: 27px;
+}
+
+.tray-slot small {
+  color: #a9885f;
+  font-weight: 800;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.toolbar button,
+.primary {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 10px;
+  background: #ffb22e;
+  color: #35210e;
+  font-weight: 900;
+  box-shadow: 0 9px 16px rgba(136, 79, 10, .18);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.toolbar button:nth-child(2) {
+  background: #8bd96d;
+}
+
+.toolbar button:nth-child(3) {
+  background: #ff8d7a;
+}
+
+.toolbar button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(.28);
+  opacity: .62;
+  box-shadow: none;
+}
+
+.toolbar svg,
+.primary svg {
+  flex: 0 0 auto;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(51, 36, 20, .38);
+  padding: 20px;
+  z-index: 99;
+}
+
+.modal-card {
+  width: min(390px, 92vw);
+  padding: 26px 22px;
+  border-radius: 8px;
+  text-align: center;
+  background: #fffaf0;
+  box-shadow: 0 22px 70px rgba(40, 24, 8, .28);
+  border: 1px solid rgba(84, 58, 26, .12);
+}
+
+.goose-badge {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: #fff0bd;
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+}
+
+.modal-card[data-state='won'] .goose-badge {
+  background: #dff4b7;
+}
+
+.modal-card[data-state='lost'] .goose-badge {
+  background: #ffd3c8;
+}
+
+.modal-card h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.modal-card p {
+  margin: 0 0 18px;
+  line-height: 1.65;
+  color: #6d5030;
+}
+
+.primary {
+  width: 100%;
+  font-size: 17px;
+}
+
+@media (max-width: 380px) {
+  .app-shell {
+    padding: 13px 10px 18px;
+  }
+
+  h1 {
+    font-size: 29px;
+  }
+
+  .stats {
+    gap: 6px;
+  }
+
+  .stat-card {
+    width: 64px;
+    padding: 7px 5px;
+  }
+
+  .stat-card strong {
+    font-size: 17px;
+  }
+
+  .board {
+    height: 420px;
+  }
+
+  .toolbar {
+    gap: 7px;
+  }
+
+  .toolbar button {
+    padding-inline: 6px;
+  }
+}
