@@ -3,12 +3,15 @@ import { BoardItem } from '../data/gameConfig';
 type GameBoardProps = {
   board: BoardItem[];
   availableIds: Set<string>;
+  pickedItemId: string | null;
   onPick: (item: BoardItem) => void;
 };
 
-const GameBoard = ({ board, availableIds, onPick }: GameBoardProps) => {
+const GameBoard = ({ board, availableIds, pickedItemId, onPick }: GameBoardProps) => {
   return (
     <section className="board" aria-label="抓大鵝遊戲區">
+      <div className="farm-sun" />
+      <div className="board-label">農場桌面</div>
       <div className="pond-glow" />
       {board
         .slice()
@@ -18,7 +21,9 @@ const GameBoard = ({ board, availableIds, onPick }: GameBoardProps) => {
           return (
             <button
               key={item.id}
-              className={`game-item ${available ? 'available' : 'locked'}`}
+              className={`game-item ${available ? 'available' : 'locked'} ${
+                pickedItemId === item.id ? 'picked' : ''
+              }`}
               style={{
                 left: `${item.x}%`,
                 top: `${item.y}%`,

@@ -9,7 +9,7 @@ const Header = ({ timeLeft, score }: HeaderProps) => {
   return (
     <header className="game-header">
       <div>
-        <p className="eyebrow">Catch Goose</p>
+        <p className="eyebrow">Catch Goose · Farm Puzzle</p>
         <h1>抓大鵝</h1>
       </div>
       <div className="stats">

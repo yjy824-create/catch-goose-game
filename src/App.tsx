@@ -11,11 +11,17 @@ function App() {
   return (
     <main className="app-shell">
       <Header timeLeft={game.timeLeft} score={game.score} />
+      <div className="level-pill">第 1 關 · 初級挑戰</div>
       <div className="message-bar">{game.message}</div>
-      <GameBoard board={game.board} availableIds={game.availableIds} onPick={game.pickItem} />
-      <Tray tray={game.tray} />
+      <GameBoard
+        board={game.board}
+        availableIds={game.availableIds}
+        pickedItemId={game.pickedItemId}
+        onPick={game.pickItem}
+      />
+      <Tray tray={game.tray} clearingType={game.clearingType} />
       <ToolBar
-        disabled={!game.isPlaying}
+        disabled={!game.isPlaying || game.isBusy}
         onHint={game.useHint}
         onShuffle={game.useShuffle}
         onRemove={game.useRemove}

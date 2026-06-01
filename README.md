@@ -4,6 +4,11 @@
 
 本项目为原创 UI、原创代码与占位视觉实现，不是任何现有游戏的官方版本，也不复刻第三方素材、截图、商标、音效或关卡。
 
+## 在线地址
+
+- Vercel Production：https://catch-goose-game.vercel.app
+- GitHub Repository：https://github.com/yjy824-create/catch-goose-game
+
 ## 游戏玩法
 
 - 点击中间叠放区里没有被遮挡的物品。
@@ -13,6 +18,15 @@
 - 使用「提示」「打亂」「移除」道具可以辅助通关，打亂扣 30 分，移除扣 50 分。
 - 倒计时结束或下方 7 格收纳栏装满时失败。
 - 清空桌面和收纳栏后胜利，并获得胜利与剩余时间奖励。
+
+## 第二阶段优化
+
+- 升级为更完整的农场小院视觉：鹅黄色、奶白色、浅橙色、草绿色。
+- 增强按钮、游戏区、收纳篮、胜利/失败弹窗的立体感和动画反馈。
+- 使用 Web Audio API 生成点击、三消、胜利、失败和道具音效，不依赖外部音频文件。
+- 优化手机端布局，常见 iPhone / Android 宽度下无横向溢出，按钮保持适合手指点击。
+- 补充 Image2 原创素材提示词，方便后续替换正式 PNG 素材。
+- 增加网页 title、meta description 和 SVG favicon。
 
 ## 本地运行
 
@@ -54,15 +68,32 @@ git push -u origin main
 
 ## Vercel 部署说明
 
-在 Vercel 中选择 Add New Project，导入 GitHub 仓库后使用以下设置：
+当前项目包含 `vercel.json`，可直接使用：
 
-- Framework Preset：Vite
+```bash
+vercel --prod
+```
+
+关键配置：
+
 - Install Command：`npm install`
 - Build Command：`npm run build`
 - Output Directory：`dist`
+- Development Command：`npm run dev`
 
 部署后请验证首页能打开、游戏能开始、手机浏览器可点击、刷新后没有白屏，控制台没有明显报错。
 
 ## 视觉资源
 
-当前版本使用 emoji 与 CSS 图形作为可运行占位素材，确保项目不依赖外部图片也能正常游玩。正式素材可根据 [docs/image2-prompts.md](docs/image2-prompts.md) 的原创 Image2 提示词生成后替换。
+当前版本使用 emoji、CSS 图形与 SVG favicon 作为可运行占位素材，确保项目不依赖外部图片也能正常游玩。正式素材可根据 [docs/image2-prompts.md](docs/image2-prompts.md) 的原创 Image2 提示词生成后替换到 [public/assets](public/assets)。
+
+## 后续可扩展功能
+
+- 多关卡和难度递增
+- 连击奖励与更夸张的消除动画
+- 本地排行榜与最佳成绩
+- 每日挑战
+- PWA 手机桌面安装
+- 正式原创 PNG 素材与音效包
+- 更精细的遮挡和碰撞判断
+

@@ -17,6 +17,7 @@ const ResultModal = ({ status, message, onStart }: ResultModalProps) => {
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="result-title">
       <div className="modal-card" data-state={status}>
+        {status === 'won' && <div className="confetti" aria-hidden="true">✦ ✿ ✦</div>}
         <div className="goose-badge">🪿</div>
         <h2 id="result-title">{title}</h2>
         <p>{message}</p>
