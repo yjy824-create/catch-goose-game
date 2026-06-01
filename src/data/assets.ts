@@ -9,14 +9,14 @@ export const imageAssets = {
     fail: asset('goose/goose-fail.png')
   },
   items: {
-    goose: asset('items/item-goose.png'),
-    corn: asset('items/item-corn.png'),
     carrot: asset('items/item-carrot.png'),
-    fish: asset('items/item-fish.png'),
-    apple: asset('items/item-apple.png'),
-    bread: asset('items/item-bread.png'),
-    leaf: asset('items/item-leaf.png'),
-    bucket: asset('items/item-bucket.png')
+    cabbage: asset('items/item-cabbage.png'),
+    corn: asset('items/item-corn.png'),
+    bucket: asset('items/item-bucket.png'),
+    boot: asset('items/item-boot.png'),
+    egg: asset('items/item-egg.png'),
+    hay: asset('items/item-hay.png'),
+    feed: asset('items/item-feed.png')
   } satisfies Record<ItemTypeId, string>,
   background: {
     level1: asset('background/bg-level-1.png'),
@@ -26,17 +26,21 @@ export const imageAssets = {
   },
   ui: {
     trayBasket: asset('ui/tray-basket.png'),
-    buttonStart: asset('ui/button-start.png')
+    buttonStart: asset('ui/button-start.png'),
+    panelResult: asset('ui/panel-result.png'),
+    iconScore: asset('ui/icon-score.png'),
+    iconCombo: asset('ui/icon-combo.png'),
+    iconTimer: asset('ui/icon-timer.png')
   },
   sfx: {
-    tap: asset('sfx/tap.mp3'),
+    click: asset('sfx/click.mp3'),
     match: asset('sfx/match.mp3'),
     win: asset('sfx/win.mp3'),
-    lose: asset('sfx/lose.mp3')
+    fail: asset('sfx/fail.mp3'),
+    tool: asset('sfx/tool.mp3')
   }
 } as const;
 
 export const getItemImage = (type: ItemTypeId) => imageAssets.items[type];
 export const getLevelBackground = (levelId: number) =>
   levelId === 1 ? imageAssets.background.level1 : levelId === 2 ? imageAssets.background.level2 : imageAssets.background.level3;
-

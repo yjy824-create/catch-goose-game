@@ -1,43 +1,71 @@
 # Assets
 
-当前版本使用 emoji、CSS 与 SVG favicon 完成，不依赖外部图片，也不会因为缺少正式素材而无法运行。
+当前版本可以在没有正式 PNG / MP3 的情况下运行：游戏会优先尝试读取 `src/data/assets.ts` 中登记的资源路径，图片缺失或加载失败时会回退到 emoji、CSS 渐层和现有 Web Audio API 音效，不会因为 404 素材而白屏或崩溃。
 
-正式素材生成后建议按以下目录放置：
+## 目录用途
 
-- `goose/`：大鹅角色、胜利大鹅、失败大鹅、封面大鹅。
-- `items/`：三消物品图标，例如玉米、胡萝卜、小鱼、苹果、面包、叶子、水桶。
-- `background/`：第 1 关农场背景、第 2 关小院背景、第 3 关终极挑战背景。
-- `ui/`：收纳篮、托盘、按钮、分数牌、弹窗框、装饰贴纸。
-- `sfx/`：正式点击、三消、胜利、失败、按钮音效。
+- `goose/`：大鹅主角色、胜利大鹅、失败大鹅。
+- `items/`：三消物品图标，必须使用正方形透明 PNG。
+- `background/`：封面图与 3 个关卡背景图。
+- `ui/`：收纳篮、按钮、结果面板、分数 / combo / timer 图标。
+- `sfx/`：正式点击、三消、胜利、失败、道具音效。
 
-代码路径集中在 `src/data/assets.ts`，当前约定文件名：
+## 正式素材文件名清单
 
-- `goose/goose-main.png`
-- `goose/goose-win.png`
-- `goose/goose-fail.png`
-- `background/bg-level-1.png`
-- `background/bg-level-2.png`
-- `background/bg-level-3.png`
-- `background/cover.png`
-- `items/item-goose.png`
-- `items/item-corn.png`
-- `items/item-carrot.png`
-- `items/item-fish.png`
-- `items/item-apple.png`
-- `items/item-bread.png`
-- `items/item-leaf.png`
-- `items/item-bucket.png`
-- `ui/tray-basket.png`
-- `ui/button-start.png`
-- `sfx/tap.mp3`
-- `sfx/match.mp3`
-- `sfx/win.mp3`
-- `sfx/lose.mp3`
+大鹅角色：
 
-建议规范：
+- `public/assets/goose/goose-main.png`
+- `public/assets/goose/goose-win.png`
+- `public/assets/goose/goose-fail.png`
 
-- 图片优先使用透明 PNG。
-- 物品图标使用正方形画布，保留安全边距。
-- 背景使用 9:16 竖屏比例。
-- UI 元件保持鹅黄色、奶白色、浅橙色、草绿色的统一风格。
-- 当前代码已经预留引用路径；文件不存在或加载失败时会自动 fallback 到 emoji / CSS。
+背景：
+
+- `public/assets/background/cover.png`
+- `public/assets/background/bg-level-1.png`
+- `public/assets/background/bg-level-2.png`
+- `public/assets/background/bg-level-3.png`
+
+物品图标：
+
+- `public/assets/items/item-carrot.png`
+- `public/assets/items/item-cabbage.png`
+- `public/assets/items/item-corn.png`
+- `public/assets/items/item-bucket.png`
+- `public/assets/items/item-boot.png`
+- `public/assets/items/item-egg.png`
+- `public/assets/items/item-hay.png`
+- `public/assets/items/item-feed.png`
+
+UI 素材：
+
+- `public/assets/ui/tray-basket.png`
+- `public/assets/ui/button-start.png`
+- `public/assets/ui/panel-result.png`
+- `public/assets/ui/icon-score.png`
+- `public/assets/ui/icon-combo.png`
+- `public/assets/ui/icon-timer.png`
+
+音效素材预留：
+
+- `public/assets/sfx/click.mp3`
+- `public/assets/sfx/match.mp3`
+- `public/assets/sfx/win.mp3`
+- `public/assets/sfx/fail.mp3`
+- `public/assets/sfx/tool.mp3`
+
+## 替换规则
+
+1. 文件名必须和上方清单、`src/data/assets.ts` 完全一致。
+2. 把 Image2 生成的 PNG 放进对应目录后，不需要改代码，组件会自动优先显示正式图片。
+3. 如果正式图片缺失、命名错误或加载失败，`AssetImage` 会显示对应 emoji fallback。
+4. 背景图缺失时，关卡仍会显示 CSS 渐层背景。
+5. 音效文件目前为预留路径，游戏仍使用 Web Audio API 生成音效；后续可在音效 hook 中接入 MP3。
+6. 替换素材后执行 `npm run build`，通过后 push 到 GitHub，Vercel 会自动部署，也可以手动执行 `vercel --prod`。
+
+## 建议规格
+
+- 大鹅角色：`1024x1024`，透明背景 PNG。
+- 物品图标：`512x512`，透明背景 PNG，主体居中并保留安全边距。
+- 背景图：`1080x1920`，竖屏 9:16 PNG，不需要透明背景。
+- UI 横向素材：按实际用途输出透明 PNG，例如收纳篮 `1600x360`。
+- 音效：短 MP3，点击和道具 0.1-0.3 秒，三消 0.3-0.6 秒，胜利 / 失败 0.8-1.5 秒。

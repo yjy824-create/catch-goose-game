@@ -11,9 +11,7 @@ const shuffle = <T,>(items: T[]): T[] => {
 
 export const createBoard = (level: LevelConfig): BoardItem[] => {
   const selected = ITEM_TYPES.slice(0, 8);
-  const pool = selected.flatMap((item) =>
-    Array.from({ length: item.id === 'goose' ? level.gooseRepeats : level.itemRepeats }, () => item)
-  );
+  const pool = selected.flatMap((item) => Array.from({ length: level.itemRepeats }, () => item));
 
   return shuffle(pool).map((item, index) => {
     const layer = Math.floor(index / level.slotsPerLayer);

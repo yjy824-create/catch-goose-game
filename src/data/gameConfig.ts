@@ -1,13 +1,13 @@
 export const TRAY_LIMIT = 7;
 export const ITEM_TYPES = [
-  { id: 'goose', label: '大鵝', emoji: '🪿' },
-  { id: 'corn', label: '玉米', emoji: '🌽' },
   { id: 'carrot', label: '胡蘿蔔', emoji: '🥕' },
-  { id: 'fish', label: '小魚', emoji: '🐟' },
-  { id: 'apple', label: '蘋果', emoji: '🍎' },
-  { id: 'bread', label: '麵包', emoji: '🍞' },
-  { id: 'leaf', label: '葉子', emoji: '🍃' },
-  { id: 'bucket', label: '水桶', emoji: '🪣' }
+  { id: 'cabbage', label: '高麗菜', emoji: '🥬' },
+  { id: 'corn', label: '玉米', emoji: '🌽' },
+  { id: 'bucket', label: '水桶', emoji: '🪣' },
+  { id: 'boot', label: '雨靴', emoji: '🥾' },
+  { id: 'egg', label: '鵝蛋', emoji: '🥚' },
+  { id: 'hay', label: '乾草', emoji: '🌾' },
+  { id: 'feed', label: '飼料', emoji: '🫘' }
 ] as const;
 
 export type ItemTypeId = (typeof ITEM_TYPES)[number]['id'];
@@ -20,7 +20,6 @@ export type LevelConfig = {
   difficulty: '簡單' | '中等' | '困難';
   timeLimit: number;
   itemRepeats: number;
-  gooseRepeats: number;
   columns: number;
   slotsPerLayer: number;
   xGap: number;
@@ -41,7 +40,6 @@ export const LEVELS: LevelConfig[] = [
     difficulty: '簡單',
     timeLimit: 100,
     itemRepeats: 3,
-    gooseRepeats: 3,
     columns: 5,
     slotsPerLayer: 15,
     xGap: 16,
@@ -60,7 +58,6 @@ export const LEVELS: LevelConfig[] = [
     difficulty: '中等',
     timeLimit: 85,
     itemRepeats: 6,
-    gooseRepeats: 3,
     columns: 5,
     slotsPerLayer: 15,
     xGap: 16,
@@ -79,7 +76,6 @@ export const LEVELS: LevelConfig[] = [
     difficulty: '困難',
     timeLimit: 70,
     itemRepeats: 9,
-    gooseRepeats: 3,
     columns: 5,
     slotsPerLayer: 22,
     xGap: 15,

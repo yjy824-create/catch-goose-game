@@ -66,6 +66,14 @@
 - 三个关卡支持不同背景：第 1 关清晨草地感，第 2 关午后农场桌面，第 3 关傍晚终极挑战。
 - 当前没有正式 PNG 也能正常运行，背景会使用 CSS 渐层与装饰元素，物品会使用 emoji。
 
+## 第五阶段素材替换流程
+
+- 素材文件名已经和 `src/data/assets.ts`、`public/assets/README.md` 对齐。
+- 物品图标统一为胡萝卜、高丽菜、玉米、水桶、雨靴、鹅蛋、干草、饲料 8 类。
+- 大鹅角色素材只用于封面和结果弹窗，不再作为三消物品图标。
+- 正式 PNG 缺失时，图片组件会自动回退到 emoji；背景图缺失时会显示 CSS 农场背景。
+- 音效文件路径已预留，当前版本继续使用 Web Audio API，缺少 MP3 不影响游玩。
+
 ## 本地运行
 
 ```bash
@@ -127,10 +135,13 @@ vercel --prod
 
 ### 如何替换正式 PNG
 
-1. 按 `docs/image2-prompts.md` 生成对应素材。
-2. 把文件放到 `public/assets` 对应目录，文件名与 `src/data/assets.ts` 保持一致。
-3. 重新执行 `npm run build`。
-4. 如果图片缺失或路径错误，游戏仍会 fallback 到 emoji / CSS，不会白屏。
+1. 按 `docs/image2-prompts.md` 生成对应 PNG。
+2. 把 Image2 生成的 PNG 放到 `public/assets` 对应目录。
+3. 文件名必须和 `src/data/assets.ts`、`public/assets/README.md` 清单一致。
+4. 不需要修改代码，游戏会自动优先显示正式图片。
+5. 如果图片缺失、命名错误或加载失败，游戏会 fallback 到 emoji / CSS，不会白屏。
+6. 替换素材后执行 `npm run build`。
+7. push 到 GitHub 后 Vercel 会自动部署，也可以手动执行 `vercel --prod`。
 
 常用文件名：
 
@@ -142,8 +153,27 @@ vercel --prod
 - `public/assets/background/bg-level-3.png`
 - `public/assets/background/cover.png`
 - `public/assets/items/item-carrot.png`
+- `public/assets/items/item-cabbage.png`
+- `public/assets/items/item-corn.png`
 - `public/assets/items/item-bucket.png`
+- `public/assets/items/item-boot.png`
+- `public/assets/items/item-egg.png`
+- `public/assets/items/item-hay.png`
+- `public/assets/items/item-feed.png`
 - `public/assets/ui/tray-basket.png`
+- `public/assets/ui/button-start.png`
+- `public/assets/ui/panel-result.png`
+- `public/assets/ui/icon-score.png`
+- `public/assets/ui/icon-combo.png`
+- `public/assets/ui/icon-timer.png`
+
+正式音效预留文件名：
+
+- `public/assets/sfx/click.mp3`
+- `public/assets/sfx/match.mp3`
+- `public/assets/sfx/win.mp3`
+- `public/assets/sfx/fail.mp3`
+- `public/assets/sfx/tool.mp3`
 
 ## 后续可扩展功能
 
