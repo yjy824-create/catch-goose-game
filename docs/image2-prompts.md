@@ -120,7 +120,7 @@ Create an original mobile game cover illustration for Catch Goose style casual p
 | `bg-level-1.png` | 1080x1920 | 否 | `public/assets/background/` | 第 1 关清晨农场小院背景 |
 | `bg-level-2.png` | 1080x1920 | 否 | `public/assets/background/` | 第 2 关午后农场桌面背景 |
 | `bg-level-3.png` | 1080x1920 | 否 | `public/assets/background/` | 第 3 关傍晚终极挑战背景 |
-| `cover.png` | 1080x1920 | 否 | `public/assets/background/` | 游戏封面背景 |
+| `cover.png` | 1600x900 | 否 | `public/assets/ui/` | 首页封面图 |
 | `item-carrot.png` | 512x512 | 是 | `public/assets/items/` | 胡萝卜图标 |
 | `item-cabbage.png` | 512x512 | 是 | `public/assets/items/` | 高丽菜图标 |
 | `item-corn.png` | 512x512 | 是 | `public/assets/items/` | 玉米图标 |
@@ -181,10 +181,10 @@ Create an original funny white goose failure PNG for a mobile farm courtyard mat
 
 ## 背景 PNG
 
-`public/assets/background/cover.png`
+`public/assets/ui/cover.png`
 
 ```text
-Create an original vertical mobile game cover background PNG, 1080x1920, sunny cute farm courtyard with grass, small pond, wooden fence, wicker basket and playful goose feeling, clear central space for title overlay, goose yellow, cream, light orange and grass green palette, rounded flat cartoon style, no text, no logo, no brand.
+Create an original 16:9 mobile game cover PNG, sunny cute farm courtyard with grass, wooden fence, wicker basket, a mischievous white goose hero and floating farm item stickers, clear enough for title overlay, goose yellow, cream, light orange and grass green palette, rounded flat cartoon style, no text, no logo, no brand.
 ```
 
 `public/assets/background/bg-level-1.png`

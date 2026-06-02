@@ -6,8 +6,8 @@
 
 - `goose/`：大鹅主角色、胜利大鹅、失败大鹅。
 - `items/`：三消物品图标，必须使用正方形透明 PNG。
-- `background/`：封面图与 3 个关卡背景图。
-- `ui/`：收纳篮、按钮、结果面板、分数 / combo / timer 图标。
+- `background/`：3 个关卡背景图。
+- `ui/`：首页封面图、收纳篮、按钮、结果面板、分数 / combo / timer 图标。
 - `sfx/`：正式点击、三消、胜利、失败、道具音效。
 
 ## 正式素材文件名清单
@@ -20,7 +20,6 @@
 
 背景：
 
-- `public/assets/background/cover.png`
 - `public/assets/background/bg-level-1.png`
 - `public/assets/background/bg-level-2.png`
 - `public/assets/background/bg-level-3.png`
@@ -38,6 +37,7 @@
 
 UI 素材：
 
+- `public/assets/ui/cover.png`
 - `public/assets/ui/tray-basket.png`
 - `public/assets/ui/button-start.png`
 - `public/assets/ui/panel-result.png`

@@ -1,5 +1,6 @@
 import { Home, Play, RotateCcw, StepForward } from 'lucide-react';
 import AssetImage from './AssetImage';
+import type { CSSProperties } from 'react';
 import { imageAssets } from '../data/assets';
 import { GameStatus, LevelConfig } from '../data/gameConfig';
 import { ResultSummary } from '../hooks/useGameLogic';
@@ -34,7 +35,16 @@ const ResultModal = ({
 
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="result-title">
-      <div className="modal-card" data-state={state}>
+      <div
+        className="modal-card"
+        data-state={state}
+        style={
+          {
+            '--panel-image': `url("${imageAssets.ui.panelResult}")`,
+            '--button-start-image': `url("${imageAssets.ui.buttonStart}")`
+          } as CSSProperties
+        }
+      >
         {(isLevelWon || isGameWon) && <div className="confetti" aria-hidden="true">✦ ✿ ✦</div>}
         <div className="goose-badge">
           <AssetImage

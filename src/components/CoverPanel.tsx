@@ -10,7 +10,7 @@ const CoverPanel = ({ highScore }: CoverPanelProps) => {
   return (
     <section
       className="cover-panel"
-      style={{ '--cover-image': `url("${imageAssets.background.cover}")` } as CSSProperties}
+      style={{ '--cover-image': `url("${imageAssets.ui.cover}")` } as CSSProperties}
       aria-label="遊戲封面"
     >
       <div className="cover-art">

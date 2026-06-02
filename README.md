@@ -62,7 +62,7 @@
 
 - 新增 `src/data/assets.ts` 统一管理所有图片与音效路径。
 - 新增 `AssetImage` fallback 组件：优先显示 PNG，加载失败时自动显示 emoji。
-- 首页增加封面区，可替换 `public/assets/background/cover.png` 与 `public/assets/goose/goose-main.png`。
+- 首页增加封面区，可替换 `public/assets/ui/cover.png` 与 `public/assets/goose/goose-main.png`。
 - 三个关卡支持不同背景：第 1 关清晨草地感，第 2 关午后农场桌面，第 3 关傍晚终极挑战。
 - 当前没有正式 PNG 也能正常运行，背景会使用 CSS 渐层与装饰元素，物品会使用 emoji。
 
@@ -151,7 +151,7 @@ vercel --prod
 - `public/assets/background/bg-level-1.png`
 - `public/assets/background/bg-level-2.png`
 - `public/assets/background/bg-level-3.png`
-- `public/assets/background/cover.png`
+- `public/assets/ui/cover.png`
 - `public/assets/items/item-carrot.png`
 - `public/assets/items/item-cabbage.png`
 - `public/assets/items/item-corn.png`

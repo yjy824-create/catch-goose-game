@@ -25,6 +25,7 @@ export const imageAssets = {
     cover: asset('background/cover.png')
   },
   ui: {
+    cover: asset('ui/cover.png'),
     trayBasket: asset('ui/tray-basket.png'),
     buttonStart: asset('ui/button-start.png'),
     panelResult: asset('ui/panel-result.png'),

@@ -1,5 +1,6 @@
 import AssetImage from './AssetImage';
-import { getItemImage } from '../data/assets';
+import type { CSSProperties } from 'react';
+import { getItemImage, imageAssets } from '../data/assets';
 import { BoardItem, ItemTypeId, TRAY_LIMIT } from '../data/gameConfig';
 
 type TrayProps = {
@@ -13,7 +14,7 @@ const Tray = ({ tray, clearingType }: TrayProps) => {
   return (
     <section className="tray-wrap" aria-label="下方收納欄">
       <div className="tray-title">小籃子</div>
-      <div className="tray">
+      <div className="tray" style={{ '--tray-image': `url("${imageAssets.ui.trayBasket}")` } as CSSProperties}>
         {slots.map((item, index) => (
           <div
             key={item?.id ?? `slot-${index}`}
