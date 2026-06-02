@@ -2,6 +2,7 @@ import AssetImage from './components/AssetImage';
 import CoverPanel from './components/CoverPanel';
 import GameBoard from './components/GameBoard';
 import Header from './components/Header';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import ResultModal from './components/ResultModal';
 import SoundControls from './components/SoundControls';
 import ToolBar from './components/ToolBar';
@@ -21,7 +22,12 @@ function App() {
         onToggle={game.sound.toggle}
         onVolumeChange={game.sound.setVolume}
       />
-      {game.status === 'ready' && <CoverPanel highScore={game.highScore} />}
+      {game.status === 'ready' && (
+        <>
+          <CoverPanel highScore={game.highScore} />
+          <PWAInstallPrompt />
+        </>
+      )}
       <div className="level-pill">
         {game.currentLevel.shortTitle} · {game.currentLevel.title} · {game.currentLevel.difficulty}
       </div>

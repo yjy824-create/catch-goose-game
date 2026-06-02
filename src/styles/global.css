@@ -333,6 +333,55 @@ span.run-icon {
   line-height: 1.55;
 }
 
+.install-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  padding: 9px 10px;
+  border-radius: 15px;
+  background: rgba(255, 253, 244, .92);
+  color: #5e421e;
+  box-shadow: inset 0 0 0 2px rgba(132, 91, 33, .08), 0 7px 14px rgba(97, 68, 22, .1);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.install-card > span {
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.install-card svg {
+  color: #5f8b31;
+  flex: 0 0 auto;
+}
+
+.install-card button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #ffc950, #ffab24);
+  color: #35210e;
+  font-size: 12px;
+  font-weight: 950;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 4px 0 #c77a14;
+  cursor: pointer;
+}
+
+.install-card button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #9e6b25;
+}
+
 .board {
   height: min(51vh, 462px);
   min-height: 390px;
@@ -857,6 +906,16 @@ span.run-icon {
 
   .sound-toggle,
   .sound-volume {
+    min-height: 44px;
+  }
+
+  .install-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .install-card button {
+    grid-column: 1 / -1;
+    width: 100%;
     min-height: 44px;
   }
 

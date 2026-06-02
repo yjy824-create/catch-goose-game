@@ -31,7 +31,9 @@ export const imageAssets = {
     panelResult: asset('ui/panel-result.png'),
     iconScore: asset('ui/icon-score.png'),
     iconCombo: asset('ui/icon-combo.png'),
-    iconTimer: asset('ui/icon-timer.png')
+    iconTimer: asset('ui/icon-timer.png'),
+    pwaIcon192: asset('ui/pwa-icon-192.png'),
+    pwaIcon512: asset('ui/pwa-icon-512.png')
   },
   sfx: {
     click: asset('sfx/click.mp3'),

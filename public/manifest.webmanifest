@@ -1,0 +1,25 @@
+{
+  "name": "抓大鹅",
+  "short_name": "抓大鹅",
+  "description": "可爱的三消收纳抓大鹅小游戏",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7d6",
+  "theme_color": "#f6b23c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/ui/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/ui/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
