@@ -1,6 +1,6 @@
 import { Home, Play, RotateCcw, StepForward } from 'lucide-react';
 import AssetImage from './AssetImage';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { imageAssets } from '../data/assets';
 import { GameStatus, LevelConfig } from '../data/gameConfig';
 import { ResultSummary } from '../hooks/useGameLogic';
@@ -13,6 +13,7 @@ type ResultModalProps = {
   onRetry: () => void;
   onNextLevel: () => void;
   onHome: () => void;
+  soundControls: ReactNode;
 };
 
 const ResultModal = ({
@@ -22,7 +23,8 @@ const ResultModal = ({
   onStart,
   onRetry,
   onNextLevel,
-  onHome
+  onHome,
+  soundControls
 }: ResultModalProps) => {
   if (status === 'playing') return null;
 
@@ -83,6 +85,7 @@ const ResultModal = ({
 
         {resultSummary?.timeBonus ? <div className="record-line">時間獎勵 +{resultSummary.timeBonus}</div> : null}
         {resultSummary?.isNewRecord ? <div className="record-line new-record">新紀錄！</div> : null}
+        <div className="modal-sound">{soundControls}</div>
 
         <div className="modal-actions">
           {isReady && (

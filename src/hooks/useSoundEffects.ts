@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { imageAssets } from '../data/assets';
 
 declare global {
@@ -8,6 +8,10 @@ declare global {
 }
 
 type SoundName = 'tap' | 'match' | 'win' | 'lose' | 'tool';
+
+const SOUND_ENABLED_KEY = 'catch-goose-sound-enabled';
+const SOUND_VOLUME_KEY = 'catch-goose-sound-volume';
+const DEFAULT_VOLUME = 0.7;
 
 type Note = {
   frequency: number;
@@ -48,10 +52,49 @@ const mp3Map: Record<SoundName, string> = {
   tool: imageAssets.sfx.tool
 };
 
+const clampVolume = (value: number) => Math.min(1, Math.max(0, value));
+
+const readSoundEnabled = () => {
+  if (typeof window === 'undefined') return true;
+  const value = window.localStorage.getItem(SOUND_ENABLED_KEY);
+  return value === null ? true : value === 'true';
+};
+
+const readSoundVolume = () => {
+  if (typeof window === 'undefined') return DEFAULT_VOLUME;
+  const value = window.localStorage.getItem(SOUND_VOLUME_KEY);
+  if (value === null) return DEFAULT_VOLUME;
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? clampVolume(parsed) : DEFAULT_VOLUME;
+};
+
 export const useSoundEffects = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const audioRef = useRef<Partial<Record<SoundName, HTMLAudioElement>>>({});
   const failedMp3Ref = useRef<Partial<Record<SoundName, boolean>>>({});
+  const [soundEnabled, setSoundEnabled] = useState(readSoundEnabled);
+  const [soundVolume, setSoundVolumeState] = useState(readSoundVolume);
+
+  const setSoundVolume = useCallback((value: number) => {
+    setSoundVolumeState(clampVolume(value));
+  }, []);
+
+  const toggleSound = useCallback(() => {
+    setSoundEnabled((enabled) => !enabled);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(SOUND_ENABLED_KEY, String(soundEnabled));
+  }, [soundEnabled]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(SOUND_VOLUME_KEY, String(soundVolume));
+    Object.values(audioRef.current).forEach((audio) => {
+      if (audio) audio.volume = soundVolume;
+    });
+  }, [soundVolume]);
 
   const getContext = useCallback(() => {
     if (typeof window === 'undefined') return null;
@@ -71,6 +114,8 @@ export const useSoundEffects = () => {
 
   const playSynth = useCallback(
     (name: SoundName) => {
+      if (!soundEnabled || soundVolume <= 0) return;
+
       const context = getContext();
       if (!context) return;
 
@@ -83,7 +128,7 @@ export const useSoundEffects = () => {
         oscillator.type = note.type ?? 'sine';
         oscillator.frequency.setValueAtTime(note.frequency, start);
         gain.gain.setValueAtTime(0.0001, start);
-        gain.gain.exponentialRampToValueAtTime(note.gain ?? 0.045, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime((note.gain ?? 0.045) * soundVolume, start + 0.01);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + note.duration);
 
         oscillator.connect(gain);
@@ -92,7 +137,7 @@ export const useSoundEffects = () => {
         oscillator.stop(start + note.duration + 0.03);
       });
     },
-    [getContext]
+    [getContext, soundEnabled, soundVolume]
   );
 
   const getAudio = useCallback((name: SoundName) => {
@@ -101,7 +146,7 @@ export const useSoundEffects = () => {
     if (!audioRef.current[name]) {
       const audio = new Audio(mp3Map[name]);
       audio.preload = 'auto';
-      audio.volume = 0.72;
+      audio.volume = soundVolume;
       audio.addEventListener(
         'error',
         () => {
@@ -113,10 +158,12 @@ export const useSoundEffects = () => {
     }
 
     return audioRef.current[name] ?? null;
-  }, []);
+  }, [soundVolume]);
 
   const play = useCallback(
     (name: SoundName) => {
+      if (!soundEnabled || soundVolume <= 0) return;
+
       const audio = getAudio(name);
       if (!audio) {
         playSynth(name);
@@ -124,6 +171,7 @@ export const useSoundEffects = () => {
       }
 
       try {
+        audio.volume = soundVolume;
         audio.currentTime = 0;
         const playback = audio.play();
         if (playback) {
@@ -137,8 +185,14 @@ export const useSoundEffects = () => {
         playSynth(name);
       }
     },
-    [getAudio, playSynth]
+    [getAudio, playSynth, soundEnabled, soundVolume]
   );
 
-  return { play };
+  return {
+    play,
+    soundEnabled,
+    soundVolume,
+    setSoundVolume,
+    toggleSound
+  };
 };

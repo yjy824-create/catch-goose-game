@@ -58,7 +58,7 @@ const clampScore = (value: number) => Math.max(0, value);
 const comboScore = (combo: number) => 10 + Math.max(0, combo - 1) * 5;
 
 export const useGameLogic = () => {
-  const { play } = useSoundEffects();
+  const { play, soundEnabled, soundVolume, setSoundVolume, toggleSound } = useSoundEffects();
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const currentLevel = LEVELS[currentLevelIndex];
   const [board, setBoard] = useState<BoardItem[]>(() => createBoard(LEVELS[0]));
@@ -327,7 +327,12 @@ export const useGameLogic = () => {
     pickItem,
     useHint,
     useShuffle,
-    useRemove
+    useRemove,
+    sound: {
+      enabled: soundEnabled,
+      volume: soundVolume,
+      setVolume: setSoundVolume,
+      toggle: toggleSound
+    }
   };
 };
-
