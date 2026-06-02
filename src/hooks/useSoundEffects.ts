@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { imageAssets } from '../data/assets';
 
 declare global {
   interface Window {
@@ -39,8 +40,18 @@ const soundMap: Record<SoundName, Note[]> = {
   ]
 };
 
+const mp3Map: Record<SoundName, string> = {
+  tap: imageAssets.sfx.click,
+  match: imageAssets.sfx.match,
+  win: imageAssets.sfx.win,
+  lose: imageAssets.sfx.fail,
+  tool: imageAssets.sfx.tool
+};
+
 export const useSoundEffects = () => {
   const contextRef = useRef<AudioContext | null>(null);
+  const audioRef = useRef<Partial<Record<SoundName, HTMLAudioElement>>>({});
+  const failedMp3Ref = useRef<Partial<Record<SoundName, boolean>>>({});
 
   const getContext = useCallback(() => {
     if (typeof window === 'undefined') return null;
@@ -58,7 +69,7 @@ export const useSoundEffects = () => {
     return contextRef.current;
   }, []);
 
-  const play = useCallback(
+  const playSynth = useCallback(
     (name: SoundName) => {
       const context = getContext();
       if (!context) return;
@@ -82,6 +93,51 @@ export const useSoundEffects = () => {
       });
     },
     [getContext]
+  );
+
+  const getAudio = useCallback((name: SoundName) => {
+    if (typeof window === 'undefined' || failedMp3Ref.current[name]) return null;
+
+    if (!audioRef.current[name]) {
+      const audio = new Audio(mp3Map[name]);
+      audio.preload = 'auto';
+      audio.volume = 0.72;
+      audio.addEventListener(
+        'error',
+        () => {
+          failedMp3Ref.current[name] = true;
+        },
+        { once: true }
+      );
+      audioRef.current[name] = audio;
+    }
+
+    return audioRef.current[name] ?? null;
+  }, []);
+
+  const play = useCallback(
+    (name: SoundName) => {
+      const audio = getAudio(name);
+      if (!audio) {
+        playSynth(name);
+        return;
+      }
+
+      try {
+        audio.currentTime = 0;
+        const playback = audio.play();
+        if (playback) {
+          void playback.catch(() => {
+            failedMp3Ref.current[name] = true;
+            playSynth(name);
+          });
+        }
+      } catch {
+        failedMp3Ref.current[name] = true;
+        playSynth(name);
+      }
+    },
+    [getAudio, playSynth]
   );
 
   return { play };
